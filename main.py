@@ -31,21 +31,21 @@ def get_db():
 def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
     new_text=models.TTSPayload(enterText=request.enterText)
     try:
-        db.add(new_text)
-        db.commit()
-        db.refresh(new_text)
-        
-        data = new_text.enterText
-        print(type(data))
+        data = dict(new_text)
+        print(type(new_text))
         engine = pyttsx3.init()
         engine.setProperty('rate', 125)
         engine.setProperty('volume',1.0)  
         voices = engine.getProperty('voices')
         engine.setProperty('voice', voices[0].id)
-        engine.say(data)
-        engine.save_to_file(data, 'pyttsx.mp3')
+        engine.say(new_text)
+        engine.save_to_file(new_text, 'pyttsx.mp3')
         engine.runAndWait()
         engine.stop()
+        
+        db.add(new_text)
+        db.commit()
+        db.refresh(new_text)
         
         return JSONResponse(status_code=status.HTTP_201_CREATED, content =jsonable_encoder(new_text))
     except Exception:
