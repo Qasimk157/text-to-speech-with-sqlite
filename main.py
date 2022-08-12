@@ -23,7 +23,7 @@ def get_db():
         db.close()
         
 
-@app.post('/by-pyttsx3/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
+@app.post('/speech/by-pyttsx3/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
                            responses={
                            status.HTTP_400_BAD_REQUEST: {"model":  schemas.Responses},
                            status.HTTP_422_UNPROCESSABLE_ENTITY: {"model":  schemas.Responses},
@@ -35,14 +35,15 @@ def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
         db.commit()
         db.refresh(new_text)
         
-        print(new_text.enterText)
+        data = new_text.enterText
+        print(type(data))
         engine = pyttsx3.init()
         engine.setProperty('rate', 125)
         engine.setProperty('volume',1.0)  
         voices = engine.getProperty('voices')
         engine.setProperty('voice', voices[0].id)
-        engine.say(new_text.enterText)
-        engine.save_to_file(new_text.enterText, 'pyttsx.mp3')
+        engine.say(data)
+        engine.save_to_file(data, 'pyttsx.mp3')
         engine.runAndWait()
         engine.stop()
         
