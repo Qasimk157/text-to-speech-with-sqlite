@@ -51,7 +51,7 @@ def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
     except Exception:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content =jsonable_encoder(schemas.Responses))
 
-@app.post('/tts/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
+@app.post('/speech/by-tts/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
                            responses={
                            status.HTTP_400_BAD_REQUEST: {"model":  schemas.Responses},
                            status.HTTP_422_UNPROCESSABLE_ENTITY: {"model":  schemas.Responses},
@@ -66,7 +66,7 @@ def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
     except Exception:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content =jsonable_encoder(schemas.Responses))
 
-@app.post('/pyttsx3/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
+@app.post('/speech/by-gtts/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
                            responses={
                            status.HTTP_400_BAD_REQUEST: {"model":  schemas.Responses},
                            status.HTTP_422_UNPROCESSABLE_ENTITY: {"model":  schemas.Responses},
@@ -81,7 +81,7 @@ def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
     except Exception:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content =jsonable_encoder(schemas.Responses))
 
-@app.post('/gtts/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
+@app.post('/speech/by-text-to-speech/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
                            responses={
                            status.HTTP_400_BAD_REQUEST: {"model":  schemas.Responses},
                            status.HTTP_422_UNPROCESSABLE_ENTITY: {"model":  schemas.Responses},
@@ -96,7 +96,7 @@ def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
     except Exception:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content =jsonable_encoder(schemas.Responses))
 
-@app.post('/ruth-tts/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
+@app.post('/speech/by-ruth-tts/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
                            responses={
                            status.HTTP_400_BAD_REQUEST: {"model":  schemas.Responses},
                            status.HTTP_422_UNPROCESSABLE_ENTITY: {"model":  schemas.Responses},
