@@ -5,7 +5,6 @@ from apis import models, schemas
 from apis.database import SessionLocal, engine
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
-import pyttsx3
 
 
 app=FastAPI()
@@ -31,21 +30,15 @@ def get_db():
 def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
     new_text=models.TTSPayload(enterText=request.enterText)
     try:
-        data = dict(new_text)
-        print(type(new_text))
-        engine = pyttsx3.init()
-        engine.setProperty('rate', 125)
-        engine.setProperty('volume',1.0)  
-        voices = engine.getProperty('voices')
-        engine.setProperty('voice', voices[0].id)
-        engine.say(new_text)
-        engine.save_to_file(new_text, 'pyttsx.mp3')
-        engine.runAndWait()
-        engine.stop()
-        
         db.add(new_text)
         db.commit()
         db.refresh(new_text)
+        
+
+        import pyttsx3;
+        engine = pyttsx3.init();
+        engine.say(new_text.enterText);
+        engine.runAndWait()
         
         return JSONResponse(status_code=status.HTTP_201_CREATED, content =jsonable_encoder(new_text))
     except Exception:
