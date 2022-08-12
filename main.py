@@ -5,6 +5,9 @@ from apis import models, schemas
 from apis.database import SessionLocal, engine
 from fastapi.responses import JSONResponse
 from fastapi.encoders import jsonable_encoder
+import pyttsx3
+
+
 app=FastAPI()
 
 models.Base.metadata.create_all(engine)
@@ -20,7 +23,7 @@ def get_db():
         db.close()
         
 
-@app.post('/text-to-speech/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
+@app.post('/by-pyttsx3/', tags=['text-to-speech'], status_code=status.HTTP_201_CREATED, response_model=schemas.TTSResponsePayload,
                            responses={
                            status.HTTP_400_BAD_REQUEST: {"model":  schemas.Responses},
                            status.HTTP_422_UNPROCESSABLE_ENTITY: {"model":  schemas.Responses},
@@ -31,6 +34,18 @@ def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
         db.add(new_text)
         db.commit()
         db.refresh(new_text)
+        
+        print(new_text.enterText)
+        engine = pyttsx3.init()
+        engine.setProperty('rate', 125)
+        engine.setProperty('volume',1.0)  
+        voices = engine.getProperty('voices')
+        engine.setProperty('voice', voices[0].id)
+        engine.say(new_text.enterText)
+        engine.save_to_file(new_text.enterText, 'pyttsx.mp3')
+        engine.runAndWait()
+        engine.stop()
+        
         return JSONResponse(status_code=status.HTTP_201_CREATED, content =jsonable_encoder(new_text))
     except Exception:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content =jsonable_encoder(schemas.Responses))
