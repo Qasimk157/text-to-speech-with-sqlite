@@ -36,9 +36,15 @@ def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
         
 
         import pyttsx3;
-        engine = pyttsx3.init();
-        engine.say(new_text.enterText);
+        engine = pyttsx3.init()
+        engine.setProperty('rate', 125)
+        engine.setProperty('volume',1.0)  
+        voices = engine.getProperty('voices')
+        engine.setProperty('voice', voices[0].id)
+        engine.say(new_text.enterText)
+        engine.save_to_file(new_text.enterText, 'pyttsx.mp3')
         engine.runAndWait()
+        engine.stop()
         
         return JSONResponse(status_code=status.HTTP_201_CREATED, content =jsonable_encoder(new_text))
     except Exception:
@@ -55,6 +61,18 @@ def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
         db.add(new_text)
         db.commit()
         db.refresh(new_text)
+        
+        import pyttsx3;
+        engine = pyttsx3.init()
+        engine.setProperty('rate', 125)
+        engine.setProperty('volume',1.0)  
+        voices = engine.getProperty('voices')
+        engine.setProperty('voice', voices[0].id)
+        engine.say(new_text.enterText)
+        engine.save_to_file(new_text.enterText, 'pyttsx.mp3')
+        engine.runAndWait()
+        engine.stop()
+        
         return JSONResponse(status_code=status.HTTP_201_CREATED, content =jsonable_encoder(new_text))
     except Exception:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content =jsonable_encoder(schemas.Responses))
@@ -70,6 +88,19 @@ def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
         db.add(new_text)
         db.commit()
         db.refresh(new_text)
+        
+        import pyttsx3;
+        engine = pyttsx3.init()
+        engine.setProperty('rate', 125)
+        engine.setProperty('volume',1.0)  
+        voices = engine.getProperty('voices')
+        engine.setProperty('voice', voices[0].id)
+        engine.say(new_text.enterText)
+        engine.save_to_file(new_text.enterText, 'pyttsx.mp3')
+        engine.runAndWait()
+        engine.stop()
+        
+        
         return JSONResponse(status_code=status.HTTP_201_CREATED, content =jsonable_encoder(new_text))
     except Exception:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content =jsonable_encoder(schemas.Responses))
