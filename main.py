@@ -100,8 +100,8 @@ def create(request:schemas.TTSRequestPayload,db:Session=Depends(get_db)):
         engine.runAndWait()
         engine.stop()
         
-        
-        return JSONResponse(status_code=status.HTTP_201_CREATED, content =jsonable_encoder(new_text))
+        return True
+        # return JSONResponse(status_code=status.HTTP_201_CREATED, content =jsonable_encoder(new_text))
     except Exception:
         return JSONResponse(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, content =jsonable_encoder(schemas.Responses))
 
